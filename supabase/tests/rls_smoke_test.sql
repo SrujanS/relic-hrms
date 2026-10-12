@@ -1,0 +1,14 @@
+-- Manual RLS smoke-test guide (run with two separate authenticated test users).
+-- Do not run as postgres/service_role to validate RLS; privileged roles bypass RLS.
+--
+-- 1. Create User A and User B through Supabase Auth.
+-- 2. User A calls create_company('Tenant A', 'tenant-a').
+-- 3. User B calls create_company('Tenant B', 'tenant-b').
+-- 4. As User A, select employees; only Tenant A rows should be visible.
+-- 5. As User A, try selecting Tenant B tenant_id directly; no rows should be returned.
+-- 6. As User A, attempt to insert an employee with Tenant B's tenant_id; it must fail.
+-- 7. As an employee-role membership, attempt to insert an employee; it must fail.
+-- 8. As a payroll_officer, verify payroll access but verify recruitment/admin-only operations remain blocked.
+--
+-- Recommended: convert these into automated integration tests using Supabase local development
+-- and distinct JWTs before any production launch.
